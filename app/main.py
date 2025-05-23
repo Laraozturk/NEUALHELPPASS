@@ -90,6 +90,19 @@ class FourthScreen(Screen):
 
 # 📌 Yedinci Sayfa (Safety Map)
 
+# 📌 Yedinci Sayfa (Safety Map)
+class WelcomeInfoScreen(Screen):
+    pass
+
+class FaceInfoScreen(Screen):
+    pass
+
+class ScoreInfoScreen(Screen):
+    pass
+
+class MapInfoScreen(Screen):
+    pass
+
 
 # 📌 Sekizinci Sayfa (Kullanıcı Profili ve Bilgileri)
 class EighthScreen(Screen):
@@ -149,7 +162,11 @@ class MyScreenManager(ScreenManager):
         self.add_widget(SeventhScreen(name="seventh"))
         self.add_widget(EighthScreen(name="eighth"))
         self.add_widget(EmergencyScreen(name="emergency"))
-
+        self.add_widget(WelcomeInfoScreen(name="welcome_info"))
+        self.add_widget(FaceInfoScreen(name="face_info"))
+        self.add_widget(ScoreInfoScreen(name="score_info"))
+        self.add_widget(MapInfoScreen(name="map_info"))
+        
 # 📌 Ana Uygulama
 class NEUALHELPPASSApp(App):
     def build(self):
