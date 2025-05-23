@@ -42,7 +42,7 @@
                 background_normal: "assets/images/i_button.png"
                 background_down: "assets/images/i_button.png"
                 pos_hint: {"center_x": 0.5, "y": 0.65}  
-                on_press: app.root.current = "fourth"
+                on_press: app.root.current = "welcome_info"
 
         Widget:
             size_hint_y: 0.03
@@ -790,3 +790,566 @@
                 on_press: app.root.current = "eighth"
             Label:
                 size_hint_x: 1
+
+
+
+# Bu kodları mevcut ui.kv dosyanızın sonuna ekleyin
+
+# 📌 Welcome Info Screen (Prototip 1)
+<WelcomeInfoScreen>:
+    name: "welcome_info"
+    canvas.before:
+        Color:
+            rgb: 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        # Üst Mor Çubuk
+        BoxLayout:
+            size_hint_y: None
+            height: dp(90)
+            canvas.before:
+                Color:
+                    rgba: (75/255, 36/255, 151/255, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Label:
+                text: "NEUAL-HELPPASS"
+                font_size: dp(28)
+                bold: True
+                color: 1, 1, 1, 1
+
+        Widget:
+            size_hint_y: 0.05
+
+        # WELCOME Başlığı
+        Label:
+            text: "WELCOME"
+            font_size: dp(32)
+            bold: True
+            color: (75/255, 36/255, 151/255, 1)
+            size_hint_y: None
+            height: dp(80)
+
+        Widget:
+            size_hint_y: 0.08
+
+        # Orta Resim
+        Image:
+            source: 'assets/images/WELCOME.png'  # Bu görseli assets/images klasörüne eklemelisiniz
+            size_hint: None, None
+            size: dp(280), dp(240)
+            pos_hint: {"center_x": 0.5}
+            allow_stretch: True
+            keep_ratio: True
+
+        Widget:
+            size_hint_y: 0.15
+
+        # Alt Mor Bölüm ve Açıklama
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(250)
+            canvas.before:
+                Color:
+                    rgba: (75/255, 36/255, 151/255, 1)
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [30, 30, 0, 0]
+            
+            Widget:
+                size_hint_y: 0.1
+
+            Label:
+                text: "NEUAL-HELPPASS is a mobile application designed to help anyone in danger and in need of help. Our goal is always to ensure your safety. Stay safe and positive with us."
+                text_size: self.width - dp(40), None
+                font_size: dp(16)
+                color: 1, 1, 1, 1
+                halign: "left"
+                valign: "middle"
+                size_hint_y: 0.7
+                padding: dp(20), 0
+
+            # Sayfa göstergesi noktaları
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: None, None
+                size: dp(120), dp(20)
+                pos_hint: {"center_x": 0.5}
+                spacing: dp(10)
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: (30/255, 10/255, 80/255, 1)
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+
+            Widget:
+                size_hint_y: 0.1
+
+    # Tıklama için görünmez buton
+    Button:
+        size_hint: 1, 1
+        background_color: 0, 0, 0, 0
+        on_press: app.root.current = "face_info"
+
+# 📌 Face Info Screen (Prototip 2)
+<FaceInfoScreen>:
+    name: "face_info"
+    canvas.before:
+        Color:
+            rgb: 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        # Üst Mor Çubuk
+        BoxLayout:
+            size_hint_y: None
+            height: dp(90)
+            canvas.before:
+                Color:
+                    rgba: (75/255, 36/255, 151/255, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Label:
+                text: "NEUAL-HELPPASS"
+                font_size: dp(28)
+                bold: True
+                color: 1, 1, 1, 1
+
+        Widget:
+            size_hint_y: 0.08
+
+        # Başlık
+        Label:
+            text: "Artificial Intelligence\nSupported Face Analysis\nFeature"
+            font_size: dp(24)
+            bold: True
+            color: (75/255, 36/255, 151/255, 1)
+            text_size: self.width, None
+            halign: "center"
+            valign: "middle"
+            size_hint_y: None
+            height: dp(120)
+
+        Widget:
+            size_hint_y: 0.05
+
+        # Orta Resim
+        Image:
+            source: 'assets/images/Face_Analysis.png'  # Bu görseli assets/images klasörüne eklemelisiniz
+            size_hint: None, None
+            size: dp(300), dp(200)
+            pos_hint: {"center_x": 0.5}
+            allow_stretch: True
+            keep_ratio: True
+
+        Widget:
+            size_hint_y: 0.1
+
+        # Alt Mor Bölüm ve Açıklama
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(250)
+            canvas.before:
+                Color:
+                    rgba: (75/255, 36/255, 151/255, 1)
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [30, 30, 0, 0]
+            
+            Widget:
+                size_hint_y: 0.1
+
+            Label:
+                text: "The application uses AI-powered face analysis to detect emotions and, if the danger level exceeds 60%, automatically alerts emergency services with the user's location."
+                text_size: self.width - dp(40), None
+                font_size: dp(16)
+                color: 1, 1, 1, 1
+                halign: "left"
+                valign: "middle"
+                size_hint_y: 0.7
+                padding: dp(20), 0
+
+            # Sayfa göstergesi noktaları
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: None, None
+                size: dp(120), dp(20)
+                pos_hint: {"center_x": 0.5}
+                spacing: dp(10)
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: (30/255, 10/255, 80/255, 1)
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+
+            Widget:
+                size_hint_y: 0.1
+
+    # Tıklama için görünmez buton
+    Button:
+        size_hint: 1, 1
+        background_color: 0, 0, 0, 0
+        on_press: app.root.current = "score_info"
+
+# 📌 Score Info Screen (Prototip 3)
+<ScoreInfoScreen>:
+    name: "score_info"
+    canvas.before:
+        Color:
+            rgb: 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        # Üst Mor Çubuk
+        BoxLayout:
+            size_hint_y: None
+            height: dp(90)
+            canvas.before:
+                Color:
+                    rgba: (75/255, 36/255, 151/255, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Label:
+                text: "NEUAL-HELPPASS"
+                font_size: dp(28)
+                bold: True
+                color: 1, 1, 1, 1
+
+        Widget:
+            size_hint_y: 0.15
+
+        # Başlık
+        Label:
+            text: "Score System"
+            font_size: dp(32)
+            bold: True
+            color: (75/255, 36/255, 151/255, 1)
+            size_hint_y: None
+            height: dp(60)
+
+        Widget:
+            size_hint_y: 0.08
+
+        # Orta Resim
+        Image:
+            source: 'assets/images/Score_System.png'  # Bu görseli assets/images klasörüne eklemelisiniz
+            size_hint: None, None
+            size: dp(300), dp(200)
+            pos_hint: {"center_x": 0.5}
+            allow_stretch: True
+            keep_ratio: True
+
+        Widget:
+            size_hint_y: 0.1
+
+        # Alt Mor Bölüm ve Açıklama
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(250)
+            canvas.before:
+                Color:
+                    rgba: (75/255, 36/255, 151/255, 1)
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [30, 30, 0, 0]
+            
+            Widget:
+                size_hint_y: 0.1
+
+            Label:
+                text: "We can evaluate the places we go according to the danger situation we live there. In this way, you can decide to go by looking at the safety score of a place and the authorities can take precautions against dangers."
+                text_size: self.width - dp(40), None
+                font_size: dp(16)
+                color: 1, 1, 1, 1
+                halign: "left"
+                valign: "middle"
+                size_hint_y: 0.7
+                padding: dp(20), 0
+
+            # Sayfa göstergesi noktaları
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: None, None
+                size: dp(120), dp(20)
+                pos_hint: {"center_x": 0.5}
+                spacing: dp(10)
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: (30/255, 10/255, 80/255, 1)
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+
+            Widget:
+                size_hint_y: 0.1
+
+    # Tıklama için görünmez buton
+    Button:
+        size_hint: 1, 1
+        background_color: 0, 0, 0, 0
+        on_press: app.root.current = "map_info"
+
+# 📌 Map Info Screen (Prototip 4)
+<MapInfoScreen>:
+    name: "map_info"
+    canvas.before:
+        Color:
+            rgb: 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        # Üst Mor Çubuk
+        BoxLayout:
+            size_hint_y: None
+            height: dp(90)
+            canvas.before:
+                Color:
+                    rgba: (75/255, 36/255, 151/255, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Label:
+                text: "NEUAL-HELPPASS"
+                font_size: dp(28)
+                bold: True
+                color: 1, 1, 1, 1
+
+        Widget:
+            size_hint_y: 0.15
+
+        # Başlık
+        Label:
+            text: "Map Section"
+            font_size: dp(32)
+            bold: True
+            color: (75/255, 36/255, 151/255, 1)
+            size_hint_y: None
+            height: dp(60)
+
+        Widget:
+            size_hint_y: 0.08
+
+        # Orta Resim
+        Image:
+            source: 'assets/images/Map_Section.png'  # Bu görseli assets/images klasörüne eklemelisiniz
+            size_hint: None, None
+            size: dp(280), dp(200)
+            pos_hint: {"center_x": 0.5}
+            allow_stretch: True
+            keep_ratio: True
+
+        Widget:
+            size_hint_y: 0.1
+
+        # Alt Mor Bölüm ve Açıklama
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(250)
+            canvas.before:
+                Color:
+                    rgba: (75/255, 36/255, 151/255, 1)
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [30, 30, 0, 0]
+            
+            Widget:
+                size_hint_y: 0.1
+
+            Label:
+                text: "The map section evaluates the level of danger according to the darkness and desolation of the roads and recommends a route to the user over safer, lively roads."
+                text_size: self.width - dp(40), None
+                font_size: dp(16)
+                color: 1, 1, 1, 1
+                halign: "left"
+                valign: "middle"
+                size_hint_y: 0.7
+                padding: dp(20), 0
+
+            # Sayfa göstergesi noktaları
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: None, None
+                size: dp(120), dp(20)
+                pos_hint: {"center_x": 0.5}
+                spacing: dp(10)
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget:
+                    size_hint: None, None
+                    size: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: (30/255, 10/255, 80/255, 1)
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+
+            Widget:
+                size_hint_y: 0.1
+
+    # Tıklama için görünmez buton
+    Button:
+        size_hint: 1, 1
+        background_color: 0, 0, 0, 0
+        on_press: app.root.current = "second"
