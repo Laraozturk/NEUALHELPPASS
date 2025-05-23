@@ -90,7 +90,7 @@ class FourthScreen(Screen):
 
 # 📌 Yedinci Sayfa (Safety Map)
 
-# 📌 Yedinci Sayfa (Safety Map)
+
 class WelcomeInfoScreen(Screen):
     pass
 
