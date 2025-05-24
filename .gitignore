@@ -1,1 +1,8 @@
+node_modules/
+.buildozer/
 venv311/
+__pycache__/
+*.db
+*.tar.gz
+*.apk
+*.aab
