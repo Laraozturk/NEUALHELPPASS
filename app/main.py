@@ -11,6 +11,7 @@ from score_system import ScoreSystemScreen
 from safety_map import SeventhScreen
 from face_analysis import FifthScreen
 from emergency_screen import EmergencyScreen
+from session_manager import SessionManager  # YENİ IMPORT
 
 
 # 📌 Ekran boyutu (iPhone 13 için)
@@ -44,11 +45,19 @@ class SecondScreen(Screen):
 
         if id_number and password and birth_year and phone_number:
             # Kullanıcıyı veritabanına kaydetme
-            self.save_user_to_db(id_number, password, birth_year, phone_number)
-            print("✅ Kullanıcı giriş yaptı!")
-            self.clear_fields()
-            # 📌 4. sayfaya yönlendirme
-            self.manager.current = "fourth"
+            user_id = self.save_user_to_db(id_number, password, birth_year, phone_number)
+            
+            if user_id:
+                # OTURUM OLUŞTUR
+                app = App.get_running_app()
+                app.session_manager.create_session(user_id)
+                
+                print("✅ Kullanıcı giriş yaptı!")
+                self.clear_fields()
+                # 📌 4. sayfaya yönlendirme
+                self.manager.current = "fourth"
+            else:
+                print("❌ Kullanıcı kaydedilemedi!")
         else:
             print("⚠️ Lütfen tüm alanları doldurun!")
 
@@ -64,12 +73,20 @@ class SecondScreen(Screen):
                 phone_number TEXT
             )
         """)
-        cursor.execute("""
-            INSERT INTO users (id_number, password, birth_year, phone_number)
-            VALUES (?, ?, ?, ?)
-        """, (id_number, password, birth_year, phone_number))
-        conn.commit()
-        conn.close()
+        
+        try:
+            cursor.execute("""
+                INSERT INTO users (id_number, password, birth_year, phone_number)
+                VALUES (?, ?, ?, ?)
+            """, (id_number, password, birth_year, phone_number))
+            user_id = cursor.lastrowid
+            conn.commit()
+            conn.close()
+            return user_id
+        except Exception as e:
+            print(f"Veritabanı hatası: {e}")
+            conn.close()
+            return None
 
     def clear_fields(self):
         self.ids.id_input.text = ""
@@ -89,8 +106,6 @@ class FourthScreen(Screen):
 
 
 # 📌 Yedinci Sayfa (Safety Map)
-
-
 class WelcomeInfoScreen(Screen):
     pass
 
@@ -103,7 +118,6 @@ class ScoreInfoScreen(Screen):
 class MapInfoScreen(Screen):
     pass
 
-
 # 📌 Sekizinci Sayfa (Kullanıcı Profili ve Bilgileri)
 class EighthScreen(Screen):
     def on_enter(self):
@@ -111,27 +125,35 @@ class EighthScreen(Screen):
         self.load_user_info()
 
     def load_user_info(self):
-        conn = sqlite3.connect("users.db")
-        cursor = conn.cursor()
-        cursor.execute("SELECT id_number, password, birth_year, phone_number FROM users ORDER BY id DESC LIMIT 1")
-        user = cursor.fetchone()
-        conn.close()
-
-        if user:
-            self.ids.profile_id.text = user[0]
+        # OTURUM YÖNETİMİ İLE KULLANICI BİLGİSİ ALMA
+        app = App.get_running_app()
+        user_info = app.session_manager.get_active_user()
+        
+        if user_info:
+            self.ids.profile_id.text = user_info['id_number']
             self.ids.profile_password.text = "******"
-            self.ids.profile_birth.text = user[2]
-            self.ids.profile_phone.text = user[3]
+            self.ids.profile_birth.text = user_info['birth_year']
+            self.ids.profile_phone.text = user_info['phone_number']
+        else:
+            print("❌ Kullanıcı bilgisi bulunamadı")
 
     def update_phone_number(self):
         new_phone = self.ids.profile_phone.text
         if new_phone:
-            conn = sqlite3.connect("users.db")
-            cursor = conn.cursor()
-            cursor.execute("UPDATE users SET phone_number = ? WHERE id = (SELECT MAX(id) FROM users)", (new_phone,))
-            conn.commit()
-            conn.close()
-            print("✅ Telefon numarası güncellendi!")
+            # OTURUM YÖNETİMİ İLE KULLANICI GÜNCELLEMESİ
+            app = App.get_running_app()
+            user_info = app.session_manager.get_active_user()
+            
+            if user_info:
+                conn = sqlite3.connect("users.db")
+                cursor = conn.cursor()
+                cursor.execute("UPDATE users SET phone_number = ? WHERE id = ?", 
+                             (new_phone, user_info['id']))
+                conn.commit()
+                conn.close()
+                print("✅ Telefon numarası güncellendi!")
+            else:
+                print("❌ Kullanıcı bulunamadı!")
         else:
             print("⚠️ Lütfen geçerli bir telefon numarası girin!")
 
@@ -148,6 +170,16 @@ class EighthScreen(Screen):
 
     def update_photo(self, path):
         self.ids.profile_image.source = path
+    
+    # YENİ: ÇIKIŞ YAPMA FONKSİYONU
+    def logout_user(self):
+        """Kullanıcı çıkışı"""
+        app = App.get_running_app()
+        app.session_manager.logout_all_sessions()
+        
+        # Ana sayfaya yönlendir
+        self.manager.current = "main"
+        print("🚪 Çıkış yapıldı")
 
 # 📌 Ekran Yönetimi
 class MyScreenManager(ScreenManager):
@@ -169,9 +201,30 @@ class MyScreenManager(ScreenManager):
         
 # 📌 Ana Uygulama
 class NEUALHELPPASSApp(App):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.session_manager = SessionManager()  # YENİ: Oturum yöneticisi
+    
     def build(self):
         sm = MyScreenManager()
+        
+        # OTOMATIK GİRİŞ KONTROLÜ
+        self.check_auto_login(sm)
+        
         return sm
+    
+    def check_auto_login(self, screen_manager):
+        """Uygulama açılırken otomatik giriş kontrolü"""
+        if self.session_manager.is_user_logged_in():
+            user_info = self.session_manager.get_active_user()
+            print(f"✅ Otomatik giriş: {user_info['id_number']}")
+            
+            # Doğrudan 4. sayfaya yönlendir
+            screen_manager.current = "fourth"
+        else:
+            print("🔐 Kullanıcı girişi gerekli")
+            # Ana sayfada kal
+            screen_manager.current = "main"
 
 if __name__ == "__main__":
     NEUALHELPPASSApp().run()
