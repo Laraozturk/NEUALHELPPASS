@@ -48,7 +48,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd,plyer,kivy_garden.mapview,requests,sqlite3,numpy,opencv,tensorflow,pyjnius==1.5.0
+requirements = python3,kivy,kivymd,plyer,requests,pillow
 
 # Sets custom source for any requirements with recipes
 # requirements.source.kivy = ../../kivy
