@@ -33,3 +33,10 @@ Users/
 # Virtual environment
 venv*/
 EOF
+
+# Android NDK dosyaları (çok büyük)
+Users/lara/Desktop/android-ndk-r25c/
+**/android-ndk-r*/
+**/AndroidNDK*/
+android-ndk-r*/
+AndroidNDK*/
