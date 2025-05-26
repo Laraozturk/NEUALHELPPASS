@@ -1,19 +1,20 @@
 import tensorflow as tf
 
-# .h5 model yolu
-keras_model_path = "models/emotion_model.h5"
-# Kaydedilecek .tflite model yolu
-tflite_model_path = "models/emotion_model.tflite"
+# Girdi dosyasının yolu
+h5_model_path = "app/models/emotion_model.h5"
 
-# .h5 modelini yükle
-model = tf.keras.models.load_model(keras_model_path)
+# Çıktı dosyasının yolu
+tflite_model_path = "assets/emotion_model.tflite"
 
-# TFLite converter ile çevir
+# Modeli yükle
+model = tf.keras.models.load_model(h5_model_path, compile=False)
+
+# TFLite dönüştürücü ile dönüştür
 converter = tf.lite.TFLiteConverter.from_keras_model(model)
 tflite_model = converter.convert()
 
-# .tflite olarak kaydet
-with open(tflite_model_path, "wb") as f:
+# Dosyayı yaz
+with open(tflite_model_path, 'wb') as f:
     f.write(tflite_model)
 
-print(f"✅ Dönüştürüldü: {tflite_model_path}")
+print("✅ .tflite modeli başarıyla oluşturuldu:", tflite_model_path)
