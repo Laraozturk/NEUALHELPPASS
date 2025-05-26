@@ -1,8 +1,34 @@
-node_modules/
-.buildozer/
-venv311/
-__pycache__/
+# Veritabanı dosyaları
 *.db
-*.tar.gz
+users.db
+security_scores.db
+
+# JSON veri dosyaları
+street_lamps_*.json
+
+# Build dosyaları
+.buildozer/
+bin/
 *.apk
 *.aab
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS dosyaları
+.DS_Store
+*/.DS_Store
+
+# Cache dosyaları
+cache/
+*.png
+latest_face.jpg
+
+# Android NDK
+android-ndk-r*/
+AndroidNDK*/
+
+# Geçici dosyalar
+Users/
