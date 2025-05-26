@@ -3,9 +3,6 @@
 users.db
 security_scores.db
 
-# JSON veri dosyaları
-street_lamps_*.json
-
 # Build dosyaları
 .buildozer/
 bin/
@@ -32,3 +29,7 @@ AndroidNDK*/
 
 # Geçici dosyalar
 Users/
+
+# Virtual environment
+venv*/
+EOF

@@ -483,84 +483,107 @@
 
 <SeventhScreen>:
     name: "seventh"
-    FloatLayout:
-
+    BoxLayout:
+        orientation: "vertical"
+        spacing: dp(8)
+        padding: dp(10)
+        
+        # Üst buton satırı
+        BoxLayout:
+            size_hint_y: None
+            height: dp(45)
+            spacing: dp(10)
+            Button:
+                text: "📍 Set My Location"
+                font_size: '14sp'
+                background_color: 0.2, 0.8, 0.2, 1  # Yeşil ton
+                on_release: root.set_origin()
+            Button:
+                text: "🔍 Find a Safe Route"
+                font_size: '14sp'
+                background_color: 0.2, 0.6, 1, 1  # Mavi ton
+                on_release: root.on_search()
+        
+        # Adres giriş ve zoom kontrolleri
+        BoxLayout:
+            size_hint_y: None
+            height: dp(45)
+            spacing: dp(10)
+            TextInput:
+                id: dest_input
+                hint_text: "Enter the destination address(e.g.:Kyrenia, Nicosia Center, EMU...)"
+                font_size: '14sp'
+                size_hint_x: 0.7
+                multiline: False
+                padding: [10, 10]
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+            Button:
+                text: "+"
+                font_size: '18sp'
+                size_hint_x: 0.15
+                background_color: 0.8, 0.8, 0.8, 1
+                on_release: root.zoom_map(map2, "in")
+            Button:
+                text: "−"
+                font_size: '18sp'
+                size_hint_x: 0.15
+                background_color: 0.8, 0.8, 0.8, 1
+                on_release: root.zoom_map(map2, "out")
+        
         # Harita
         MapView:
             id: map2
-            size_hint: 1, 1
-
-        # “Konumunuz” butonu
-        Button:
-            text: "Location"
-            size_hint: None, None
-            size: dp(100), dp(40)
-            pos_hint: {"x": 0.05, "top": 0.90}
-            on_release: root.set_origin()
-
-        # Adres girişi
-        TextInput:
-            id: dest_input
-            hint_text: "Enter Adress"
-            size_hint: 0.6, None
-            height: dp(40)
-            pos_hint: {"x": 0.15, "top": 0.90}
-
-        # “Ara” butonu
-        Button:
-            text: "Search"
-            size_hint: None, None
-            size: dp(80), dp(40)
-            pos_hint: {"x": 0.78, "top": 0.90}
-            on_release: root.on_search()
-
-        # Zoom kontrolleri
+            lat: 35.1856
+            lon: 33.3823
+            zoom: 12
+            size_hint_y: 0.65
+        
+        # Bilgi paneli - genişletilmiş
         BoxLayout:
+            size_hint_y: None
+            height: dp(120)
             orientation: "vertical"
-            size_hint: None, None
-            size: dp(50), dp(100)
-            pos_hint: {"x": 0.02, "top": 0.85}
+            padding: [8, 8]
             spacing: dp(5)
-            padding: dp(5)
-
-            Button:
-                text: "+"
-                on_release: root.zoom_map(map2, "in")
-            Button:
-                text: "–"
-                on_release: root.zoom_map(map2, "out")
-
-        # Koordinat metinleri
-        BoxLayout:
-            size_hint: 1, None
-            height: dp(30)
-            pos_hint: {"x": 0, "top": 0.08}
-            spacing: dp(10)
-
+            canvas.before:
+                Color:
+                    rgba: 0.95, 0.95, 0.95, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
             Label:
-                text: root.origin_text
-                size_hint_x: 0.5
+                text: "📌 Start: " + (root.origin_text if root.origin_text else "Not set up yet")
+                font_size: '12sp'
                 halign: "left"
                 valign: "middle"
                 text_size: self.size
-
+                color: 0.2, 0.2, 0.2, 1
+                
             Label:
-                text: root.dest_text
-                size_hint_x: 0.5
+                text: "🎯 Target location: " + (root.dest_text if root.dest_text else "Not set up yet")
+                font_size: '12sp'
                 halign: "left"
                 valign: "middle"
                 text_size: self.size
-
-        # Süre / mesafe bilgisi
-        Label:
-            text: root.route_info
-            size_hint: 1, None
-            height: dp(25)
-            pos_hint: {"x": 0, "top": 0.05}
-            halign: "center"
-            valign: "middle"
-            text_size: self.size
-
+                color: 0.2, 0.2, 0.2, 1
+                
+            Label:
+                text: "🛣️ Route: " + (root.route_info if hasattr(root, 'route_info') and root.route_info else "Route not prepared")
+                font_size: '12sp'
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+                color: (1, 0.6, 0, 1) if root.loading_status else (0.2, 0.2, 0.2, 1)
+                
+            Label:
+                text: "💡 Tip: You can choose manual location by long-pressing on the map"
+                font_size: '10sp'
+                halign: "center"
+                valign: "middle"
+                text_size: self.size
+                color: 0.5, 0.5, 0.5, 1
 
 #:import dp kivy.metrics.dp
 
@@ -685,6 +708,21 @@
             on_press: app.root.get_screen("eighth").update_phone_number()
         Widget:
             size_hint_y: 0.1  
+
+        # YENİ: ÇIKIŞ BUTONU
+        Button:
+            text: "Logout"
+            font_size: dp(18)
+            size_hint_x: 0.6
+            size_hint_y: None
+            height: dp(40)
+            pos_hint: {"center_x": 0.5}
+            background_color: (0.8, 0.2, 0.2, 1)  # Kırmızı ton
+            on_press: app.root.get_screen("eighth").logout_user()
+        
+        Widget:
+            size_hint_y: 0.1
+            
         # Alt Mor Çubuk (Home ve UserProfile Butonları)
         BoxLayout:
             size_hint_y: None

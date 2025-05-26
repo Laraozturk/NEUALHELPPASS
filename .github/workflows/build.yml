@@ -1,0 +1,106 @@
+name: Build NEUAL-HELPPASS Safety Map APK
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+        
+    - name: Install system dependencies for Safety Map
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          git zip unzip openjdk-11-jdk python3-pip \
+          autoconf libtool pkg-config zlib1g-dev \
+          libncurses5-dev libncursesw5-dev libtinfo5 \
+          cmake libffi-dev libssl-dev build-essential \
+          ccache ant libgl1-mesa-glx libglib2.0-0 \
+          libsm6 libxext6 libxrender-dev libgomp1 \
+          libgtk-3-dev libgstreamer1.0-dev
+        
+    - name: Install Python dependencies for Safety Map
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+        pip install cython buildozer
+        pip install kivy kivymd plyer requests opencv-python numpy tensorflow
+        pip install kivy-garden.mapview geopy pyjnius
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        
+    - name: Setup Android SDK/NDK
+      run: |
+        export ANDROID_SDK_ROOT=$HOME/android-sdk
+        export ANDROID_NDK_ROOT=$HOME/android-ndk
+        mkdir -p $ANDROID_SDK_ROOT $ANDROID_NDK_ROOT
+        
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
+        unzip -q commandlinetools-linux-8512546_latest.zip -d $ANDROID_SDK_ROOT
+        mv $ANDROID_SDK_ROOT/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools-temp
+        mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest
+        mv $ANDROID_SDK_ROOT/cmdline-tools-temp/* $ANDROID_SDK_ROOT/cmdline-tools/latest/
+        
+        wget -q https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
+        unzip -q android-ndk-r25c-linux.zip
+        mv android-ndk-r25c/* $ANDROID_NDK_ROOT/
+        
+    - name: Setup Buildozer
+      run: |
+        mkdir -p ~/.buildozer
+        if [ ! -f buildozer.spec ]; then
+          buildozer init
+        fi
+        
+    - name: Build APK
+      run: |
+        export PATH=$PATH:$HOME/android-sdk/cmdline-tools/latest/bin
+        export PATH=$PATH:$HOME/android-sdk/platform-tools
+        export ANDROID_SDK_ROOT=$HOME/android-sdk
+        export ANDROID_NDK_ROOT=$HOME/android-ndk
+        buildozer android debug
+        
+    - name: List generated files
+      run: |
+        echo "=== Build dizini içeriği ==="
+        ls -la bin/ || echo "bin/ dizini bulunamadı"
+        find . -name "*.apk" -type f || echo "APK dosyası bulunamadı"
+        
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v3
+      if: success()
+      with:
+        name: neual-helppass-apk
+        path: |
+          bin/*.apk
+          **/*.apk
+        retention-days: 30
+        
+    - name: Upload build logs on failure
+      uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: build-logs
+        path: |
+          .buildozer/
+          *.log
+        retention-days: 7
