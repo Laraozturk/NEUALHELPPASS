@@ -62,7 +62,16 @@ jobs:
         wget -q https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
         unzip -q android-ndk-r25c-linux.zip
         mv android-ndk-r25c/* $ANDROID_NDK_ROOT/
-        
+    
+    - name: Clean Buildozer Cache for Python 3.10
+      run: |
+        echo "🧹 Buildozer cache temizleniyor..."
+        rm -rf ~/.buildozer
+        rm -rf .buildozer
+        mkdir -p ~/.buildozer
+        python3 --version
+        echo "🎯 Cache temizleme tamamlandı" 
+    
     - name: Setup Buildozer
       run: |
         mkdir -p ~/.buildozer
