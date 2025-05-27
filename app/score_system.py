@@ -232,12 +232,12 @@ class ScoreSystemScreen(Screen):
             # YENİ: Marker'ı güncelle ve listeyi yenile
             self.refresh_marker_at_location(lat, lon, avg)
             
-            print(f"✅ Kullanıcı {user_id} tarafından {score} puan verildi")
+            print(f"✅ {score} points by user {user_id}")
         else:
-            print("❌ Aktif kullanıcı bulunamadı!")
+            print("❌ No active users found!!")
 
     def refresh_marker_at_location(self, lat, lon, avg_score):  # YENİ FONKSİYON
-        """Belirli konumdaki marker'ı güncelle"""
+        """Update marker in specific location"""
         map_w = self.ids.get("map")
         if not map_w:
             return
@@ -289,9 +289,9 @@ class ScoreSystemScreen(Screen):
             box = BoxLayout(orientation='vertical', padding=20, spacing=15)
             
             # Genel bilgi
-            info_text = f"""📊 Ortalama Puan: {avg_score:.1f}/5
-👥 Toplam Değerlendirme: {total_ratings}
-📈 En Düşük: {min_score} - En Yüksek: {max_score}"""
+            info_text = f"""📊 Average Rating: {avg_score:.1f}/5
+👥 Total Rating: {total_ratings}
+📈 Lowest: {min_score} - Highest: {max_score}"""
             
             lbl = Label(text=info_text, font_size='16sp', halign='center')
             lbl.bind(size=lbl.setter('text_size'))
@@ -299,9 +299,9 @@ class ScoreSystemScreen(Screen):
             
             # YENİ: Kullanıcı detayları (son 3 puan)
             if individual_scores:
-                user_info_text = "\n🔍 Son Değerlendirmeler:\n"
+                user_info_text = "\n🔍 Recent Reviews:\n"
                 for score_info in individual_scores[:3]:  # Son 3 puan
-                    user_info_text += f"• Kullanıcı {score_info[0]}: {score_info[1]}⭐\n"
+                    user_info_text += f"• User {score_info[0]}: {score_info[1]}⭐\n"
                 
                 user_lbl = Label(
                     text=user_info_text, 
@@ -312,9 +312,9 @@ class ScoreSystemScreen(Screen):
                 user_lbl.bind(size=user_lbl.setter('text_size'))
                 box.add_widget(user_lbl)
             
-            btn = Button(text="Kapat", size_hint=(1, None), height=40)
+            btn = Button(text="Close", size_hint=(1, None), height=40)
             pop = Popup(
-                title="📍 Konum Bilgileri",
+                title="📍 Location Information",
                 content=box,
                 size_hint=(None, None),
                 size=(Window.width * 0.8, Window.height * 0.5)  # Daha büyük popup
@@ -324,7 +324,7 @@ class ScoreSystemScreen(Screen):
             pop.open()
 
     def get_location_user_details(self, lat, lon):  # YENİ FONKSİYON
-        """Bu konuma puan veren kullanıcıların detaylarını getir"""
+        """Bring the details of the users who rated this location"""
         try:
             self.db.cursor.execute("""
                 SELECT u.id, s.score, s.created_at
@@ -335,7 +335,7 @@ class ScoreSystemScreen(Screen):
             """, (lat, lon))
             return self.db.cursor.fetchall()
         except Exception as e:
-            print(f"Kullanıcı detayları alınırken hata: {e}")
+            print(f"Error retrieveng user details: {e}")
             return []
 
 class LocationMarker(MapMarkerPopup):
