@@ -27,7 +27,7 @@ source.dir = app
 source.include_exts = py,png,jpg,kv,atlas,jpeg,ttf
 
 # (list) List of inclusions using pattern matching
-#source.include_patterns = assets/*,images/*.png
+source.include_patterns = assets/*,assets/images/*
 
 # (list) Source files to exclude (let empty to not exclude anything)
 #source.exclude_exts = spec
@@ -48,7 +48,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd,plyer,kivy_garden.mapview,requests,sqlite3,numpy,opencv,tensorflow,pyjnius==1.5.0
+requirements = python3,kivy,kivymd,plyer,requests,pillow
 
 # Sets custom source for any requirements with recipes
 # requirements.source.kivy = ../../kivy
@@ -112,7 +112,7 @@ ios.request_permissions = LOCATION_WHEN_IN_USE
 #android.features = android.hardware.usb.host
 
 # (int) Target Android API, should be as high as possible.
-android.api = 31
+android.api = 33
 
 # (int) Minimum API your APK / AAB will support.
 android.minapi = 21
@@ -130,7 +130,7 @@ android.ndk_api = 21
 #android.private_storage = True
 
 # (str) Android NDK directory (if empty, it will be automatically downloaded.)
-android.ndk_path = /Users/lara/Desktop/android-ndk-r25c/AndroidNDK9519653.app/Contents/NDK
+#android.ndk_path = /Users/lara/Desktop/android-ndk-r25c/AndroidNDK9519653.app/Contents/NDK
 
 # (str) Android SDK directory (if empty, it will be automatically downloaded.)
 #android.sdk_path =
@@ -147,7 +147,7 @@ android.ndk_path = /Users/lara/Desktop/android-ndk-r25c/AndroidNDK9519653.app/Co
 # agreements. This is intended for automation only. If set to False,
 # the default, you will be shown the license when first running
 # buildozer.
-# android.accept_sdk_license = False
+android.accept_sdk_license = True
 
 # (str) Android entry point, default is ok for Kivy-based app
 #android.entrypoint = org.kivy.android.PythonActivity
@@ -191,7 +191,6 @@ android.ndk_path = /Users/lara/Desktop/android-ndk-r25c/AndroidNDK9519653.app/Co
 #android.add_src =
 
 # (list) Android AAR archives to add
-android.add_aars = libs/opencv/opencv-android.aar
 
 # (list) Put these files or directories in the apk assets directory.
 # Either form may be used, and assets need not be in 'source.include_exts'.
@@ -294,7 +293,7 @@ android.add_libs_arm64_v8a = libs/arm64-v8a/libopencv_java4.so
 
 # (list) The Android archs to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
 # In past, was `android.arch` as we weren't supporting builds for multiple archs at the same time.
-android.archs= arm64-v8a, armeabi-v7a
+android.archs = arm64-v8a, armeabi-v7a, x86_64
 
 # (int) overrides automatic versionCode computation (used in build.gradle)
 # this is not the same as app version and should only be edited if you know what you're doing
@@ -456,3 +455,6 @@ warn_on_root = 1
 #    Then, invoke the command line with the "demo" profile:
 #
 #buildozer --profile demo android debug
+android.add_aars = libs/opencv-android.aar
+android.enable_aab = False
+p4a.extra_args = --release --dist-name=default --arch=armeabi-v7a --no-aab
