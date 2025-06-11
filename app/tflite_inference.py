@@ -32,7 +32,7 @@ def run_tflite_inference(interpreter, input_data):
         input_array = np.array(input_data, dtype=np.float32).reshape(1, 64, 64, 1)
         input_buffer = ByteBuffer.allocateDirect(input_array.nbytes)
         input_buffer.order(ByteOrder.nativeOrder())
-
+    
         for val in input_array.flatten():
             input_buffer.putFloat(val)
 
