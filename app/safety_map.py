@@ -293,7 +293,7 @@ class SeventhScreen(Screen):
     def calculate_route_safety(self, coords):
         """Rota boyunca güvenlik skoru hesapla"""
         safety_scores = []
-        lamp_radius = 0.0005  # ~50 metre
+        lamp_radius = 0.0005  
         
         for lat, lon in coords:
             nearby_lamps = self.lamp_manager.get_lamps_near_point(lat, lon, lamp_radius)
