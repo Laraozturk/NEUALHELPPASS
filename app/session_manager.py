@@ -26,7 +26,7 @@ class SessionManager:
         
         conn.commit()
         conn.close()
-        print("✅ Session tablosu hazır")
+        print("Session tablosu hazır")
     
     def create_session(self, user_id):
         """Yeni oturum oluştur"""
@@ -88,4 +88,4 @@ class SessionManager:
         
         conn.commit()
         conn.close()
-        print("🚪 Tüm oturumlar kapatıldı")
+        print(" Tüm oturumlar kapatıldı")
