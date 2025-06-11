@@ -103,7 +103,7 @@ class ScoreSystemScreen(Screen):
         return False
 
     def _trigger_popup(self, instance, touch):
-        # Uzun basma doğrulandı, haritada tıklanan koordinatları al
+        # Uzun basarak, haritada tıklanan koordinatları al
         lat, lon = instance.get_latlon_at(*touch.pos)
         self.show_star_rating_popup(lat, lon)
 
@@ -232,11 +232,11 @@ class ScoreSystemScreen(Screen):
             # YENİ: Marker'ı güncelle ve listeyi yenile
             self.refresh_marker_at_location(lat, lon, avg)
             
-            print(f"✅ {score} points by user {user_id}")
+            print(f"{score} points by user {user_id}")
         else:
-            print("❌ No active users found!!")
+            print("No active users found!!")
 
-    def refresh_marker_at_location(self, lat, lon, avg_score):  # YENİ FONKSİYON
+    def refresh_marker_at_location(self, lat, lon, avg_score): 
         """Update marker in specific location"""
         map_w = self.ids.get("map")
         if not map_w:
@@ -266,11 +266,11 @@ class ScoreSystemScreen(Screen):
         
         # DOĞRU MARKER RESİMLERİ:
         if avg_score >= 4:
-            marker.source = "assets/images/location_on.png"      # 🟢 YEŞİL - SAFE (4-5 puan)
+            marker.source = "assets/images/location_on.png"      #YEŞİL - SAFE (4-5 puan)
         elif avg_score <= 2:
-            marker.source = "assets/images/locationred_on.png"   # 🔴 KIRMIZI - DANGER (1-2 puan)
+            marker.source = "assets/images/locationred_on.png"   #KIRMIZI - DANGER (1-2 puan)
         else:
-            marker.source = "assets/images/location.png"         # 🟠 TURUNCU - NORMAL (3 puan)
+            marker.source = "assets/images/location.png"         #TURUNCU - NORMAL (3 puan)
 
         marker.bind(on_release=lambda *a: self.show_marker_info(lat, lon))
         map_w.add_widget(marker)
