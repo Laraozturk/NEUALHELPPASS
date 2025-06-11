@@ -14,7 +14,7 @@ from emergency_screen import EmergencyScreen
 from session_manager import SessionManager  # YENİ IMPORT
 
 
-# 📌 Ekran boyutu (iPhone 13 için)
+# Ekran boyutu (iPhone 13 için)
 Config.set('graphics', 'width', '390')
 Config.set('graphics', 'height', '844')
 Config.set('graphics', 'resizable', '0')  # Kullanıcı pencereyi değiştiremez
@@ -30,12 +30,12 @@ try:
 except Exception as e:
     print(f"❌ KV dosyası yüklenirken hata oluştu: {e}")
 
-# 📌 Ana Sayfa
+# Ana Sayfa
 class MainScreen(Screen):
     pass
 
 
-# 📌 Kullanıcı Girişi Sayfası
+# Kullanıcı Girişi Sayfası
 class SecondScreen(Screen):
     def login_user(self):
         id_number = self.ids.id_input.text
@@ -94,18 +94,18 @@ class SecondScreen(Screen):
         self.ids.birth_input.text = ""
         self.ids.phone_input.text = ""
 
-# 📌 Hoş Geldiniz Sayfası
+# Hoş Geldiniz Sayfası
 class ThirdScreen(Screen):
     pass
 
-# 📌 Dördüncü Sayfa (Face Analysis, Score System, Safety Map)
+#  Dördüncü Sayfa (Face Analysis, Score System, Safety Map)
 class FourthScreen(Screen):
     pass
 
-# 📌 Beşinci Sayfa (Face Analysis)
+# Beşinci Sayfa (Face Analysis)
 
 
-# 📌 Yedinci Sayfa (Safety Map)
+# Yedinci Sayfa (Safety Map)
 class WelcomeInfoScreen(Screen):
     pass
 
@@ -118,7 +118,7 @@ class ScoreInfoScreen(Screen):
 class MapInfoScreen(Screen):
     pass
 
-# 📌 Sekizinci Sayfa (Kullanıcı Profili ve Bilgileri)
+# Sekizinci Sayfa (Kullanıcı Profili ve Bilgileri)
 class EighthScreen(Screen):
     def on_enter(self):
         """Sayfaya girildiğinde kullanıcı bilgilerini getirir"""
@@ -181,7 +181,7 @@ class EighthScreen(Screen):
         self.manager.current = "main"
         print("🚪 Çıkış yapıldı")
 
-# 📌 Ekran Yönetimi
+# Ekran Yönetimi
 class MyScreenManager(ScreenManager):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -199,7 +199,7 @@ class MyScreenManager(ScreenManager):
         self.add_widget(ScoreInfoScreen(name="score_info"))
         self.add_widget(MapInfoScreen(name="map_info"))
         
-# 📌 Ana Uygulama
+#  Ana Uygulama
 class NEUALHELPPASSApp(App):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
