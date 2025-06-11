@@ -503,6 +503,7 @@
                 font_size: '14sp'
                 background_color: 0.2, 0.6, 1, 1  # Mavi ton
                 on_release: root.on_search()
+
         
         # Adres giriş ve zoom kontrolleri
         BoxLayout:
@@ -531,6 +532,14 @@
                 background_color: 0.8, 0.8, 0.8, 1
                 on_release: root.zoom_map(map2, "out")
         
+             # Geri Dön
+            Button:
+                text: "Back"
+                size_hint: None, None
+                size: dp(80), dp(40)
+                pos: dp(10), dp(60)
+                on_release: app.root.current = "fourth"
+
         # Harita
         MapView:
             id: map2
